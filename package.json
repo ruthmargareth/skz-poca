@@ -7,8 +7,8 @@
   },
   "scripts": {
     "dev": "next dev --turbopack",
-    "prisma:generate": "prisma generate",
-    "build": "node node_modules/prisma/build/index.js generate && next build",
+    "postinstall": "prisma generate",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "seed": "node prisma/seed.js"
