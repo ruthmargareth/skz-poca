@@ -6,12 +6,11 @@
     "seed": "node prisma/seed.js"
   },
   "scripts": {
-    "dev": "next dev --turbopack",
-    "postinstall": "prisma generate",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "seed": "node prisma/seed.js"
+  "dev": "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint": "next lint",
+  "seed": "node prisma/seed.js"
   },
   "type": "module",
   "dependencies": {
