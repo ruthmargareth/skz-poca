@@ -139,7 +139,7 @@ export default function AlbumPage() {
         <div className="max-w-screen-xl w-full mx-auto grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 items-center">
           {/* Teks Nama Member */}
           <div className="lg:pr-15 my-6 text-center lg:text-right">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
+            <h1 className="text-3xl mb-5 sm:text-4xl md:text-5xl font-bold">
               {album.label}
             </h1>
             {[
@@ -152,7 +152,7 @@ export default function AlbumPage() {
               "Seungmin",
               "I.N",
             ].map((name) => (
-              <p key={name} className="mt-1 text-lg">
+              <p key={name} className="m-1 text-lg">
                 {name}
               </p>
             ))}

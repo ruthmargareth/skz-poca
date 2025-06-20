@@ -8,26 +8,25 @@ datasource db {
 }
 
 model card {
-  id             String   @id @default(uuid())
-  name           String
-  era            String
-  title          String
-  type           String
-  imageUrlFront  String
-  imageUrlBack   String
-  createdAt      DateTime @default(now())
+  id            String   @id @default(uuid())
+  name          String
+  era           String
+  title         String
+  type          String
+  imageUrlFront String
+  imageUrlBack  String
+  createdAt     DateTime @default(now())
 
-   @@map("card")
+  @@map("card")
 }
 
 model user {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String @unique
-  password String
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("user")
-
 }
