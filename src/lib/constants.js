@@ -59,8 +59,8 @@
   export const groups = {
     "Mixtape" : "mixtape.jpg",
     "I Am Not": "imn.jpg",
-    "I Am Who": "Imw.jpg",
-    "I Am You": "Imy.jpg",
+    "I Am Who": "imw.jpg",
+    "I Am You": "imy.jpg",
     "Cle1: Miroh": "miroh.jpg",
     "Cle2: Yellow Wood": "yw.jpg",
     "Cle: Levanter": "levanter.jpg",

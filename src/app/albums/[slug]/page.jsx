@@ -159,11 +159,11 @@ export default function AlbumPage() {
           </div>
 
           {/* Gambar Album */}
-          <div className="w-full h-[300px] sm:h-[400px] md:h-[475px] rounded-xl overflow-hidden">
+          <div className="w-full h-[300px] sm:h-[400px] md:h-[475px] rounded-xl overflow-hidden flex items-center justify-center bg-black">
             <img
               src={`/${image}`}
               alt={album.label}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           </div>
         </div>
@@ -189,7 +189,7 @@ export default function AlbumPage() {
       </div>
 
       {/* search */}
-      <div className="flex items-center gap-2 py-4 max-w-7xl mx-auto">
+      <div className="flex items-center gap-2 py-4 max-w-7xl mx-auto px-6">
         <div className="relative max-w-sm w-full">
           <Input
             placeholder="Search photocard ..."
