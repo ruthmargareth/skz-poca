@@ -38,8 +38,8 @@
   export const albums = {
     "Mixtape" : "mixtape.svg",
     "I Am Not": "iamnot.svg",
-    "I Am Who": "Iamwho.svg",
-    "I Am You": "Iamyou.svg",
+    "I Am Who": "iamwho.svg",
+    "I Am You": "iamyou.svg",
     "Cle1: Miroh": "miroh.svg",
     "Cle2: Yellow Wood": "yw.svg",
     "Cle: Levanter": "levanter.svg",

@@ -35,7 +35,12 @@ export default function AlbumPage() {
 
   useEffect(() => {
     fetch("/api/cards")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error ${res.status}`);
+        }
+        return res.json();
+      })
       .then((data) => {
         if (Array.isArray(data)) {
           setCards(data);
@@ -130,10 +135,11 @@ export default function AlbumPage() {
     <>
       <Navbar />
       {/* hero */}
-      <div className="flex items-center justify-center pb-22 pt-15">
-        <div className="max-w-screen-xl w-full mx-auto grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8">
-          <div>
-            <h1 className="pr-15 my-6 text-right text-4xl md:text-5xl font-bold">
+      <div className="flex items-center justify-center pb-22 pt-15 px-4">
+        <div className="max-w-screen-xl w-full mx-auto grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 items-center">
+          {/* Teks Nama Member */}
+          <div className="lg:pr-15 my-6 text-center lg:text-right">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
               {album.label}
             </h1>
             {[
@@ -146,17 +152,18 @@ export default function AlbumPage() {
               "Seungmin",
               "I.N",
             ].map((name) => (
-              <p key={name} className="mt-2 pr-15 text-right text-lg">
+              <p key={name} className="mt-1 text-lg">
                 {name}
               </p>
             ))}
           </div>
 
-          <div className="bg-accent w-[750px] h-[475px] rounded-xl overflow-hidden">
+          {/* Gambar Album */}
+          <div className="w-full h-[300px] sm:h-[400px] md:h-[475px] rounded-xl overflow-hidden">
             <img
               src={`/${image}`}
               alt={album.label}
-              className="w-full h-auto object-cover"
+              className="w-full h-full object-cover"
             />
           </div>
         </div>
