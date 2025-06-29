@@ -16,9 +16,12 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
-const page = () => {
+const Page = () => {
   const [cards, setCards] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
+
   const router = useRouter();
 
   useEffect(() => {
@@ -27,6 +30,10 @@ const page = () => {
       .then((data) => setCards(data))
       .catch((err) => console.error("Gagal mengambil data kartu:", err));
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1); // Reset ke halaman 1 saat search berubah
+  }, [searchTerm]);
 
   const handleDelete = async (id) => {
     const confirm = window.confirm("Yakin ingin menghapus kartu ini?");
@@ -55,12 +62,18 @@ const page = () => {
     router.push("/admin/login");
   };
 
-  // Filter cards berdasarkan input
+  // Filter cards
   const filteredCards = cards.filter((card) =>
     [card.name, card.era, card.title, card.type].some((field) =>
       field?.toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
+
+  // Pagination logic
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentCards = filteredCards.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
 
   return (
     <div className="w-full pt-15">
@@ -97,6 +110,40 @@ const page = () => {
         </Button>
       </div>
 
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 py-6">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            Previous
+          </Button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <Button
+              key={page}
+              variant={currentPage === page ? "default" : "outline"}
+              size="sm"
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </Button>
+          ))}
+
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Next
+          </Button>
+        </div>
+      )}
+
       {/* Table */}
       <div className="border rounded-xl overflow-hidden shadow max-w-7xl mx-auto">
         <Table>
@@ -114,9 +161,9 @@ const page = () => {
           </TableHeader>
 
           <TableBody>
-            {filteredCards.map((card, index) => (
+            {currentCards.map((card, index) => (
               <TableRow key={card.id} className="odd:bg-muted/50">
-                <TableCell className="pl-4">{index + 1}</TableCell>
+                <TableCell className="pl-4">{startIndex + index + 1}</TableCell>
                 <TableCell>{card.name}</TableCell>
                 <TableCell>{card.era}</TableCell>
                 <TableCell>{card.title}</TableCell>
@@ -163,7 +210,7 @@ const page = () => {
                 </TableCell>
               </TableRow>
             ))}
-            {filteredCards.length === 0 && (
+            {currentCards.length === 0 && (
               <TableRow>
                 <TableCell
                   colSpan={8}
@@ -176,8 +223,42 @@ const page = () => {
           </TableBody>
         </Table>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-2 py-6">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+          >
+            Previous
+          </Button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <Button
+              key={page}
+              variant={currentPage === page ? "default" : "outline"}
+              size="sm"
+              onClick={() => setCurrentPage(page)}
+            >
+              {page}
+            </Button>
+          ))}
+
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default page;
+export default Page;
