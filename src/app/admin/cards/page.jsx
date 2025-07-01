@@ -32,7 +32,7 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    setCurrentPage(1); // Reset ke halaman 1 saat search berubah
+    setCurrentPage(1);
   }, [searchTerm]);
 
   const handleDelete = async (id) => {
@@ -62,24 +62,46 @@ const Page = () => {
     router.push("/admin/login");
   };
 
-  // Filter cards
   const filteredCards = cards.filter((card) =>
     [card.name, card.era, card.title, card.type].some((field) =>
       field?.toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
 
-  // Pagination logic
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentCards = filteredCards.slice(startIndex, endIndex);
   const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
 
+  const renderPageButtons = () => {
+    const pageButtons = [];
+    const blockSize = 10;
+
+    // Hitung blok saat ini
+    const currentBlock = Math.floor((currentPage - 1) / blockSize);
+    const startPage = currentBlock * blockSize + 1;
+    const endPage = Math.min(startPage + blockSize - 1, totalPages);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageButtons.push(
+        <Button
+          key={i}
+          variant={currentPage === i ? "default" : "outline"}
+          size="sm"
+          onClick={() => setCurrentPage(i)}
+        >
+          {i}
+        </Button>
+      );
+    }
+
+    return pageButtons;
+  };
+
   return (
     <div className="w-full pt-15">
       <div className="flex items-center justify-between max-w-7xl mx-auto mb-4">
         <h1 className="text-2xl font-bold">PHOTOCARD TABLE</h1>
-
         <Button
           onClick={handleLogout}
           className="gap-2 bg-[#f54242] hover:bg-[#d63434] text-white rounded-md"
@@ -122,16 +144,7 @@ const Page = () => {
             Previous
           </Button>
 
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <Button
-              key={page}
-              variant={currentPage === page ? "default" : "outline"}
-              size="sm"
-              onClick={() => setCurrentPage(page)}
-            >
-              {page}
-            </Button>
-          ))}
+          {renderPageButtons()}
 
           <Button
             variant="outline"
@@ -236,16 +249,7 @@ const Page = () => {
             Previous
           </Button>
 
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <Button
-              key={page}
-              variant={currentPage === page ? "default" : "outline"}
-              size="sm"
-              onClick={() => setCurrentPage(page)}
-            >
-              {page}
-            </Button>
-          ))}
+          {renderPageButtons()}
 
           <Button
             variant="outline"
