@@ -216,13 +216,13 @@ export default function AlbumPage() {
                 <h2 className="text-3xl font-semibold mb-4 text-black text-center">
                   {title}
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 justify-items-center">
+                <div className="grid grid-cols-2 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 justify-items-center">
                   {sortedCards.map((card) => {
                     const isFlipped = flippedCards[card.id];
                     return (
                       <div
                         key={card.id}
-                        className={`relative w-[260px] h-[390px] perspective ${
+                         className={`relative w-full aspect-[2/3] max-w-[260px] perspective ${
                           card.type === "POB"
                             ? "cursor-default"
                             : "cursor-pointer"
