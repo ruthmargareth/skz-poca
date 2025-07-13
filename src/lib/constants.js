@@ -31,7 +31,7 @@
 
   export const cardType = [
     { value: "Album", label: "Album" },
-    { value: "POB", label: "POB" },
+    { value: "Benefit", label: "Benefit" },
   ];
 
   // gambar pada navbar

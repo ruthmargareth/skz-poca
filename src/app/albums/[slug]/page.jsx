@@ -27,6 +27,9 @@ export default function AlbumPage() {
   const [activeTab, setActiveTab] = useState("Album");
   const [flippedCards, setFlippedCards] = useState({});
   const [loading, setLoading] = useState(true);
+  const [activeCard, setActiveCard] = useState(null);
+  const [animationKey, setAnimationKey] = useState(0); // Untuk trigger ulang animasi
+  const [cardRect, setCardRect] = useState(null);
 
   const params = useParams();
   const slug = params?.slug;
@@ -57,19 +60,55 @@ export default function AlbumPage() {
       });
   }, []);
 
+  useEffect(() => {
+    if (cardRect && activeCard) {
+      const popup = document.querySelector(".popup-card");
+      if (!popup) return;
+
+      popup.classList.remove("animate");
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          popup.classList.add("animate");
+        });
+      });
+    }
+  }, [cardRect, activeCard]);
+
   const toggleFlip = (id, type) => {
-    if (type === "POB") return; // tidak bisa dibalik
     setFlippedCards((prev) => ({
       ...prev,
       [id]: !prev[id],
     }));
   };
 
+  const handleCardClick = (card, event) => {
+    if (card.type === "Benefit") {
+      const rect = event.currentTarget.getBoundingClientRect();
+
+      setCardRect({
+        top: rect.top + window.scrollY,
+        left: rect.left + window.scrollX,
+        width: rect.width,
+        height: rect.height,
+      });
+
+      setActiveCard(card);
+      setAnimationKey((prev) => prev + 1);
+    }
+  };
+
+  const closeActiveCard = () => {
+    setActiveCard(null);
+  };
+
   if (!album) {
     return (
-      <div className="p-10 text-center text-red-500">
-        <h1 className="text-2xl font-bold">Album not found</h1>
-        <p>Slug: {slug}</p>
+      <div className="p-10 text-center text-black-500">
+        <h1 className="text-2xl font-bold pb-5">Album not found :(</h1>
+        <div className="flex items-center justify-center">
+          <img src="/haje.jpg" className="max-w-full h-[400px]" />
+        </div>{" "}
       </div>
     );
   }
@@ -131,6 +170,17 @@ export default function AlbumPage() {
     groupedCards[card.title].push(card);
   });
 
+  const availableTypes = cardType.filter((type) =>
+    cards.some((card) => card.era === album.label && card.type === type.value)
+  );
+
+  // Jika tab yang sekarang tidak tersedia, set ke tab pertama yang tersedia
+  useEffect(() => {
+    if (!availableTypes.find((type) => type.value === activeTab)) {
+      setActiveTab(availableTypes[0]?.value || "");
+    }
+  }, [cards, album.label]);
+
   return (
     <>
       <Navbar />
@@ -172,7 +222,7 @@ export default function AlbumPage() {
       {/* tabs */}
       <div className="flex justify-center p-6 pb-10">
         <div className="w-full max-w-4xl inline-flex items-center bg-gray-100 p-1 rounded-lg shadow-inner">
-          {cardType.map((type) => (
+          {availableTypes.map((type) => (
             <button
               key={type.value}
               onClick={() => setActiveTab(type.value)}
@@ -204,7 +254,7 @@ export default function AlbumPage() {
       {/* content */}
       <div className="max-w-7xl mx-auto p-6">
         {Object.keys(groupedCards).length === 0 ? (
-          <p className="text-gray-500 text-lg">Photocard not found.</p>
+          <p className="text-gray-500 text-lg">Loading Photocards</p>
         ) : (
           Object.entries(groupedCards).map(([title, cards]) => {
             const sortedCards = cardMember
@@ -222,12 +272,14 @@ export default function AlbumPage() {
                     return (
                       <div
                         key={card.id}
-                         className={`relative w-full aspect-[2/3] max-w-[260px] perspective ${
-                          card.type === "POB"
-                            ? "cursor-default"
-                            : "cursor-pointer"
-                        }`}
-                        onClick={() => toggleFlip(card.id, card.type)}
+                        className={`relative w-full aspect-[2/3] max-w-[260px] perspective cursor-pointer`}
+                        onClick={(e) =>
+                          card.type === "Benefit"
+                            ? handleCardClick(card, e)
+                            : card.type === "Album"
+                            ? toggleFlip(card.id, card.type)
+                            : null
+                        }
                         onMouseMove={(e) => handleMouseMove(e, card.id)}
                         onMouseLeave={() => handleMouseLeave(card.id)}
                       >
@@ -242,11 +294,9 @@ export default function AlbumPage() {
                               transformStyle: "preserve-3d",
                               transition: "transform 0.5s ease-in-out",
                               transform:
-                                card.type === "POB"
-                                  ? "rotateY(0deg)" // tidak bisa dibalik
-                                  : isFlipped
-                                  ? "rotateY(180deg)"
-                                  : "rotateY(0deg)",
+                                // card.type === "Benefit"
+                                //   ? "rotateY(0deg)" // tidak bisa dibalik
+                                isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
                             }}
                           >
                             {/* Front */}
@@ -277,6 +327,30 @@ export default function AlbumPage() {
           })
         )}
       </div>
+
+      {activeCard && activeCard.type === "Benefit" && cardRect && (
+        <div
+          className="fixed inset-0 z-40 backdrop-blur"
+          onClick={closeActiveCard}
+        >
+          <div
+            key={animationKey}
+            className="popup-card"
+            style={{
+              top: `${cardRect.top}px`,
+              left: `${cardRect.left}px`,
+              width: `${cardRect.width}px`,
+              height: `${cardRect.height}px`,
+            }}
+          >
+            <img
+              src={activeCard.imageUrlFront}
+              alt={activeCard.name}
+              className="w-full h-full object-cover rounded-xl"
+            />
+          </div>
+        </div>
+      )}
 
       <Footer />
     </>

@@ -229,7 +229,7 @@ const Page = () => {
                   colSpan={8}
                   className="text-center py-4 text-gray-500"
                 >
-                  Photocard not found
+                  Loading Photocard...
                 </TableCell>
               </TableRow>
             )}
