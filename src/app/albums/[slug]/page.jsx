@@ -73,6 +73,15 @@ export default function AlbumPage() {
         });
       });
     }
+
+     if (activeCard) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+  }
+  return () => {
+    document.body.style.overflow = "";
+  };
   }, [cardRect, activeCard]);
 
   const toggleFlip = (id, type) => {

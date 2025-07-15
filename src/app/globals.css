@@ -207,24 +207,27 @@
 }
 
 .popup-card {
+  opacity: 0;
   position: fixed;
   z-index: 50;
   border-radius: 1rem;
   overflow: hidden;
   transform-origin: center center;
   transition:
-  top 0.9s ease-in-out,
-  left 0.9s ease-in-out,
-  width 0.9s ease-in-out,
-  height 0.9s ease-in-out,
-  transform 0.9s ease-in-out;
+    top 0.5s ease,
+    left 0.5s ease,
+    width 0.5s ease,
+    height 0.5s ease,
+    transform 0.5s ease;
+  will-change: top, left, width, height, transform;
 
 }
 
 .popup-card.animate {
+  opacity: 1;
   top: 50% !important;
   left: 50% !important;
-  transform: translate(-50%, -50%) scale(1.2) rotateY(360deg);
+  transform: translate(-50%, -50%) scale(1.2);
   width: 300px !important;
   height: 450px !important;
 }
