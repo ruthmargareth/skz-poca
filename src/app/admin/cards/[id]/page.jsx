@@ -171,7 +171,7 @@ export default function UpdateCard() {
           <div className="flex flex-wrap gap-4 justify-between mt-6">
             {/* FRONT */}
             <div className="flex flex-col items-center w-[48%] border rounded-md p-5">
-              <div className="w-[150px] h-[200px] border bg-gray-100 mb-2 rounded-md overflow-hidden">
+              <div className="w-[160px] h-[250px] border bg-gray-100 mb-2 rounded-md overflow-hidden">
                 {previewFront ? (
                   <Image
                     src={previewFront}
@@ -198,7 +198,7 @@ export default function UpdateCard() {
 
             {/* BACK */}
             <div className="flex flex-col items-center w-[48%] border rounded-md p-5">
-              <div className="w-[150px] h-[200px] border bg-gray-100 mb-2 rounded-md overflow-hidden">
+              <div className="w-[160px] h-[250px] border bg-gray-100 mb-2 rounded-md overflow-hidden">
                 {previewBack ? (
                   <Image
                     src={previewBack}

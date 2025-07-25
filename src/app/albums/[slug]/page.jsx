@@ -30,6 +30,7 @@ export default function AlbumPage() {
   const [activeCard, setActiveCard] = useState(null);
   const [animationKey, setAnimationKey] = useState(0); // Untuk trigger ulang animasi
   const [cardRect, setCardRect] = useState(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   const params = useParams();
   const slug = params?.slug;
@@ -74,15 +75,24 @@ export default function AlbumPage() {
       });
     }
 
-     if (activeCard) {
-    document.body.style.overflow = "hidden";
-  } else {
-    document.body.style.overflow = "";
-  }
-  return () => {
-    document.body.style.overflow = "";
-  };
+    if (activeCard) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [cardRect, activeCard]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const toggleFlip = (id, type) => {
     setFlippedCards((prev) => ({
@@ -109,6 +119,10 @@ export default function AlbumPage() {
 
   const closeActiveCard = () => {
     setActiveCard(null);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (!album) {
@@ -359,6 +373,28 @@ export default function AlbumPage() {
             />
           </div>
         </div>
+      )}
+
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 z-50 bg-black text-white px-4 py-2 shadow-lg hover:bg-gray-800 transition"
+          aria-label="Scroll to top"
+        >
+          <svg
+            className="w-10 h-10"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 15l7-7 7 7"
+            />
+          </svg>
+        </button>
       )}
 
       <Footer />
